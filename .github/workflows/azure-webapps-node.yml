@@ -8,7 +8,7 @@ on:
 env:
   AZURE_WEBAPP_NAME: sparkgym-b7e7epb0cfdydxc2    # Updated to match your Azure Web App name
   AZURE_WEBAPP_PACKAGE_PATH: '.'
-  NODE_VERSION: '20.x'
+  NODE_VERSION: '18.17.0'
   NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
@@ -27,12 +27,18 @@ jobs:
         node-version: ${{ env.NODE_VERSION }}
         cache: 'npm'
 
+    - name: Install npm
+      run: |
+        npm install -g npm@10.2.4
+        npm --version
+
     - name: Clean install
       run: |
         rm -rf node_modules
         rm -rf .next
+        rm -f package-lock.json
         npm cache clean --force
-        npm install --legacy-peer-deps
+        npm install --no-audit --prefer-offline --legacy-peer-deps
 
     - name: Build Next.js app
       run: npm run build
