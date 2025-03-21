@@ -54,6 +54,7 @@ const customFetch = async (input: RequestInfo | URL, init?: RequestInit) => {
 }
 
 // Configure Supabase client with proper auth settings
+<<<<<<< HEAD
 export const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
@@ -65,6 +66,29 @@ export const supabase = createClient(
     }
   }
 )
+=======
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    storageKey: 'spark-auth-token',
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    detectSessionInUrl: true,
+    autoRefreshToken: true,
+    flowType: 'pkce',
+    debug: process.env.NODE_ENV === 'development'
+  },
+  global: {
+    fetch: customFetch,
+    headers: {
+      'apikey': supabaseAnonKey,
+      'Authorization': `Bearer ${supabaseAnonKey}`,
+    }
+  },
+  db: {
+    schema: 'public'
+  }
+})
+>>>>>>> 6015cc09c10c2cd329d84a9fa2937cc768733d37
 
 // Helper function to check if Supabase is properly configured
 export function isSupabaseConfigured(): boolean {
